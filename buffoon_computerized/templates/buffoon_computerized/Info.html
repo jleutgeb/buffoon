@@ -1,0 +1,29 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Anleitung Teil 2
+{% endblock %}
+
+{% block content %}
+<iframe src="{% static 'instructions_part2_de.pdf#toolbar=0&navpanes=0' %}" style="width:1000px; height:800px;" frameborder="0"></iframe>
+    {% next_button %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    setTimeout(function () {
+        $('.otree-btn-next').show();
+    }, 5 * 1000);
+</script>
+{% endblock %}
+
+
+{% block styles %}
+<style>
+    .otree-btn-next {
+        display: none;
+    }
+</style>
+{% endblock %}

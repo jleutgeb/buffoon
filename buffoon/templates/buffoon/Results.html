@@ -1,0 +1,98 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Resultat
+{% endblock %}
+
+{% block content %}
+
+    <table class="table2">
+        <tr> <td>Teilnehmer</td> <td>Wahrscheinlichkeit eines erfolgreichen Angriffs</td> <td>Wahrscheinlichkeit zu implodieren</td> </tr>
+        <tr> <td>A</td> <td>{{ piA }} %</td> <td>{{ betaA }} %</td> </tr>
+        <tr> <td>B</td> <td>{{ piB }} %</td> <td>{{ betaB }} %</td> </tr>
+        <tr> <td>C</td> <td>{{ piC }} %</td> <td>{{ betaC }} %</td> </tr>
+    </table>
+
+    {% include 'buffoon/Interface.html' %}
+
+    <p style="width:550px">
+        Der Computer hat zufällig Runde {{ pround }} gezogen und Ihnen die Rolle als <b>Teilnehmer {{ role }}</b> zugewiesen. </b>
+
+        {% if you_survive %} Sie haben <b>ÜBERLEBT</b> {% else %} Sie wurden <b>ELIMINIERT</b> {% endif %}
+
+        und erhalten <b>{{ payoff_disp }}</b>.
+    </p>
+
+    <p>
+    Insgesamt gibt es {{ num_survivors }} Überlebende, die untereinander {{ Constants.pot }} aufteilen.
+    </p>
+    <table class="table1">
+        <tr> <td>Teilnehmer</td>       <td>Ziel</td>                                                                           <td>Erfolgreicher Angriff</td>                                               <td>  Implosion  </td>                                                                        <td>Überleben</td>                           <td>Payoff</td>                  </tr>
+        <tr> <td>A</td> <td>{% if A_attacks_B == 1 %} B {% else %} C {% endif %}</td> <td>{% if A_hits == 1 %} Ja {% else %} Nein {% endif %}</td>  <td>{% if A_implodes == 1 %} Implodiert {% else %} Nein {% endif %} </td><td>{% if A_survives == 1 %} Überlebt {% else %} Eliminiert {% endif %}</td> <td>{{ A_payoff_disp }}</td></tr>
+        <tr> <td>B</td> <td>{% if B_attacks_C == 1 %} C {% else %} A {% endif %}</td> <td>{% if B_hits == 1 %} Ja {% else %} Nein {% endif %}</td>  <td>{% if B_implodes == 1 %} Implodiert {% else %} Nein {% endif %} </td><td>{% if B_survives == 1 %} Überlebt {% else %} Eliminiert {% endif %}</td> <td>{{ B_payoff_disp }}</td></tr>
+        <tr> <td>C</td> <td>{% if C_attacks_A == 1 %} A {% else %} B {% endif %}</td> <td>{% if C_hits == 1 %} Ja {% else %} Nein {% endif %}</td>  <td>{% if C_implodes == 1 %} Implodiert {% else %} Nein {% endif %} </td><td>{% if C_survives == 1 %} Überlebt {% else %} Eliminiert {% endif %}</td> <td>{{ C_payoff_disp }}</td></tr>
+    </table>
+
+    {% next_button %}
+{% endblock %}
+
+
+{% block styles %}
+
+<style type="text/css">
+
+.table1 {
+    border-collapse: collapse;
+    width:550px;
+    padding: 5px;
+    margin:0;
+    margin-bottom: 20px;
+}
+
+.table1 th, td {
+    text-align: center;
+    padding: 4px;
+}
+
+.table1 tr:last-child {
+    border-bottom: 1px solid;
+}
+
+.table1 tr:first-child {
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+}
+
+.table1  tr:nth-child({{ highlight }}) {background-color: #d8f2c3;}
+
+.table2 {
+    border-collapse: collapse;
+    width:400px;
+    padding: 5px;
+    margin:0;
+    margin-bottom: 20px;
+}
+
+.table2 td {
+    text-align: center;
+    padding: 4px;
+}
+
+.table2 tr:last-child {
+    border-bottom: 1px solid;
+}
+
+.table2 tr:first-child {
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+}
+
+.table2  tr:nth-child({{ highlight }}) {background-color: #d8f2c3;}
+
+
+
+
+</style>
+
+{% endblock %}

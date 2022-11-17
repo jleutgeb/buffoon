@@ -1,0 +1,481 @@
+{% load otree static %}
+
+    <div style="width: 400px; height: 300px; margin: 0; margin-bottom: 20px">
+    <div id="container" style="width: 300px; height: 300px; margin: 0 auto; margin-bottom: 20px"></div>
+    </div>
+
+
+{% block scripts %}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<script>
+var choice = {{ choice }};
+var chart;
+var A_attacks_B = {{ A_attack_B|json }};
+var B_attacks_C = {{ B_attack_C|json }};
+var C_attacks_A = {{ C_attack_A|json }};
+var A_hits = {{ A_hits|json }};
+var B_hits = {{ B_hits|json }};
+var C_hits = {{ C_hits|json }};
+var A_implodes = {{ A_implodes|json }};
+var B_implodes = {{ B_implodes|json }};
+var C_implodes = {{ C_implodes|json }};
+var A_survives = {{ A_survives|json }};
+var B_survives = {{ B_survives|json }};
+var C_survives = {{ C_survives|json }};
+var player_role = {{ role|json }};
+var chartoptions = {
+    credits: false,
+    exporting: { enabled: false },
+    chart: {
+        backgroundColor: 'white',
+        events: {
+            load: function () {
+
+                // Draw the flow chart
+                var ren = this.renderer,
+                    colors = Highcharts.getOptions().colors;
+
+                if (player_role === 'A' & choice === 0) {
+                    ren.label("A", 130, 200)
+                        .attr({
+                            fill: colors[0],
+                            stroke: 'white',
+                            'stroke-width': 0,
+                            padding: 5,
+                            r: 5
+                        })
+                        .css({
+                            fontSize: '15px',
+                            color: 'white',
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+                if (player_role !== 'A' | choice === 1) {
+                    ren.label("A", 130, 200)
+                        .attr({
+                            fill: colors[0],
+                            stroke: 'white',
+                            'stroke-width': 0,
+                            padding: 5,
+                            r: 5
+                        })
+                        .css({
+                            fontSize: '12px',
+                            color: 'Black'
+                        })
+                        .add();
+                }
+                if (player_role === 'B' & choice === 0) {
+                    // Opponent 1
+                    ren.label("B", 40, 82)
+                        .attr({
+                            fill: colors[5],
+                            stroke: 'white',
+                            'stroke-width': 0,
+                            padding: 5,
+                            r: 5
+                        })
+                        .css({
+                            fontSize: '15px',
+                            color: 'white',
+                            fontWeight: 'bold'
+                        })
+                        .add()
+                        .shadow(false);
+                }
+
+                if (player_role !== 'B' | choice === 1) {
+                    // Opponent 1
+                    ren.label("B", 40, 82)
+                        .attr({
+                            fill: colors[5],
+                            stroke: 'white',
+                            'stroke-width': 0,
+                            padding: 5,
+                            r: 5
+                        })
+                        .css({
+                            fontSize: '12px',
+                            color: 'Black'
+                        })
+                        .add()
+                        .shadow(false);
+                }
+                if (player_role === 'C' & choice === 0) {
+                    ren.label("C", 220, 82)
+                        .attr({
+                            fill: colors[3],
+                            stroke: 'white',
+                            'stroke-width': 0,
+                            padding: 5,
+                            r: 5
+                        })
+                        .css({
+                            fontSize: '15px',
+                            color: 'white',
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+                if (player_role !== 'C' | choice === 1) {
+                    ren.label("C", 220, 82)
+                        .attr({
+                            fill: colors[3],
+                            stroke: 'white',
+                            'stroke-width': 0,
+                            padding: 5,
+                            r: 5
+                        })
+                        .css({
+                            fontSize: '12px',
+                            color: 'Black'
+                        })
+                        .add();
+                }
+                if (A_attacks_B == 1) {
+                    //Arrow from A to B
+                    ren.path(['M', 25, 100, 'L', -25, 30, 'Z', 'M', -25, 40, 'L', -25, 31, 'L', -15, 31])
+                        .attr({
+                            'stroke-width': 3,
+                            stroke: colors[0]
+                        })
+                        .translate(95, 95)
+                        .add();
+                }
+
+
+                if (A_attacks_B == 0) {
+                    //Arrow from A to C
+                    ren.path(['M', 75, 100, 'L', 125, 30, 'Z', 'M', 125, 40, 'L', 125, 31, 'L', 115, 31])
+                        .attr({
+                            'stroke-width': 3,
+                            stroke: colors[0]
+                        })
+                        .translate(95, 95)
+                        .add();
+                }
+
+
+                if (B_attacks_C == 1) {
+                    // Arrow from B to C
+                    ren.path(['M', 0, 0, 'L', 100, 0, 'Z', 'M', 94, 6, 'L', 100, 0, 'L', 94, -6])
+                        .attr({
+                            'stroke-width': 3,
+                            stroke: colors[5]
+                        })
+                        .translate(95, 95)
+                        .add();
+
+                }
+
+                if (B_attacks_C == 0) {
+                    // Arrow from B to A
+                    ren.path(['M', -10, 25, 'L', 40, 95, 'Z', 'M', 30, 95, 'L', 41, 95, 'L', 41, 85])
+                        .attr({
+                            'stroke-width': 3,
+                            stroke: colors[5]
+                        })
+                        .translate(95, 95)
+                        .add();
+                }
+
+                if (C_attacks_A == 1) {
+                    // Arrow from C to A
+                    ren.path(['M', 110, 25, 'L', 60, 95, 'Z', 'M', 70, 95, 'L', 59, 95, 'L', 59, 85])
+                        .attr({
+                            'stroke-width': 3,
+                            stroke: colors[3]
+                        })
+                        .translate(95, 95)
+                        .add();
+                }
+
+                if (C_attacks_A == 0) {
+                    // Arrow from C to B
+                    ren.path(['M', 100, 10, 'L', 0, 10, 'Z', 'M', 6, 16, 'L', 0, 10, 'L', 6, 4])
+                        .attr({
+                            'stroke-width': 3,
+                            stroke: colors[3]
+                        })
+                        .translate(95, 95)
+                        .add();
+                }
+
+                if (A_attacks_B == 1 && A_hits == 1) {
+                    //A -> B, Hit
+                    ren.label('Treffer', 50, 160)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[0]
+                        })
+                        .add();
+                }
+
+                if (A_attacks_B == 1 && A_hits == 0) {
+                    //A -> B, Miss
+                    ren.label('Verfehlt', 50, 160)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[0]
+                        })
+                        .add();
+                }
+
+                if (A_attacks_B == 0 && A_hits == 1) {
+                    //A -> C, Hit
+                    ren.label('Treffer', 195, 160)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[0]
+                        })
+                        .add();
+                }
+
+                if (A_attacks_B == 0 && A_hits == 0) {
+                    //A -> C, Miss
+                    ren.label('Verfehlt', 195, 160)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[0]
+                        })
+                        .add();
+                }
+
+                if (B_attacks_C == 0 && B_hits == 1) {
+                    //B -> A, Hit
+                    ren.label('Treffer', 105, 135)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[5]
+                        })
+                        .add();
+                }
+
+                if (B_attacks_C == 0 && B_hits == 0) {
+                    //B -> A, Miss
+                    ren.label('Verfehlt', 110, 135)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[5]
+                        })
+                        .add();
+                }
+
+                if (B_attacks_C == 1 && B_hits == 1) {
+                    //B -> C, Hit
+                    ren.label('Treffer', 135, 75)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[5]
+                        })
+                        .add();
+                }
+
+                if (B_attacks_C == 1 && B_hits == 0) {
+                    //B -> C, Miss
+                    ren.label('Verfehlt', 135, 75)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[5]
+                        })
+                        .add();
+                }
+
+                if (C_attacks_A == 0 && C_hits == 1) {
+                    //C -> B, Hit
+                    ren.label('Treffer', 135, 105)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[3]
+                        })
+                        .add();
+                }
+
+                if (C_attacks_A == 0 && C_hits == 0) {
+                    //C -> B, Miss
+                    ren.label('Verfehlt', 135, 105)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[3]
+                        })
+                        .add();
+                }
+
+
+                if (C_attacks_A == 1 && C_hits == 1) {
+                    //C -> A, Hit
+                    ren.label('Treffer', 140, 135)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[3]
+                        })
+                        .add();
+                }
+
+                if (C_attacks_A == 1 && C_hits == 0) {
+                    //C -> A, Miss
+                    ren.label('Verfehlt', 140, 135)
+                        .css({
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: colors[3]
+                        })
+                        .add();
+                }
+
+                if (A_implodes == 1) {
+                    //A dies
+                    ren.label('Implodiert', 105, 210)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[0],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+                if (A_survives == 0) {
+                    //A dies
+                    ren.label('Eliminiert', 105, 230)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[0],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+                if (A_survives == 1) {
+                    //A survives
+                    ren.label('Überlebt', 110, 230)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[0],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+                if (B_implodes == 1) {
+                    //B dies
+                    ren.label('Implodiert', 25, 40)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[5],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+                if (B_survives == 0) {
+                    //B dies
+                    ren.label('Eliminiert', 25, 60)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[5],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+                if (B_survives == 1) {
+                    //B survives
+                    ren.label('Überlebt', 20, 60)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[5],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+                if (C_implodes == 1) {
+                    //C dies
+                    ren.label('Implodiert', 210, 40)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[3],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+
+                if (C_survives == 0) {
+                    //C implodes
+                    ren.label('Eliminiert', 210, 60)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[3],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+
+                if (C_survives == 1) {
+                    //C survives
+                    ren.label('Überlebt', 200, 60)
+                        .css({
+                            fontSize: '11px',
+                            color: colors[3],
+                            fontWeight: 'bold'
+                        })
+                        .add();
+                }
+
+
+            }
+        }
+    },
+    title: {
+        text: '',
+        style: {
+            color: 'black'
+        }
+    }
+};
+
+chart = new Highcharts.Chart('container', chartoptions);
+
+
+$(document).ready(function () {
+    $('input[type=radio]').change(
+            function () {
+                if (this.name === "A_attack_B") {
+                    A_attacks_B = parseInt(this.value);
+                    chart.destroy()
+                    chart = new Highcharts.Chart('container', chartoptions);
+                }
+                if (this.name === "B_attack_C") {
+                    B_attacks_C = parseInt(this.value);
+                    chart.destroy()
+                    chart = new Highcharts.Chart('container', chartoptions);
+                }
+                if (this.name === "C_attack_A") {
+                    C_attacks_A = parseInt(this.value);
+                    chart.destroy()
+                    chart = new Highcharts.Chart('container', chartoptions);
+                }
+            }
+    );
+});
+
+</script>
+
+{% endblock %}

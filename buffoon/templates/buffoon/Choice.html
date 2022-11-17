@@ -1,0 +1,57 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Entscheidung {{ subsession.round_number }} von {{ Constants.num_rounds }}
+{% endblock %}
+
+{% block content %}
+    <table class="table1">
+        <tr> <td>Teilnehmer</td> <td>Wahrscheinlichkeit eines erfolgreichen Angriffs</td> <td>Wahrscheinlichkeit zu implodieren</td> </tr>
+        <tr> <td>A</td> <td>{{ piA }} %</td> <td>{{ betaA }} %</td> </tr>
+        <tr> <td>B</td> <td>{{ piB }} %</td> <td>{{ betaB }} %</td> </tr>
+        <tr> <td>C</td> <td>{{ piC }} %</td> <td>{{ betaC }} %</td> </tr>
+    </table>
+
+
+    {% include 'buffoon/Interface.html' %}
+
+    <p style="margin-bottom: 20px;">Es werden {{ Constants.pot }} unter den Überlebenden verteilt. Wen greifen Sie an...</p>
+    <table style="width: 400px; margin: 0; margin-bottom: 20px">
+    <tr><td>{% formfield player.A_attack_B label="wenn Sie A sind?"%}</td>  <td>{% formfield player.B_attack_C label="wenn Sie B sind?"%}</td> <td>{% formfield player.C_attack_A label="wenn Sie C sind?"%}</td></tr>
+    </table>
+
+
+    {% next_button %}
+
+{% endblock %}
+
+
+{% block styles %}
+
+<style type="text/css">
+.table1 {
+    border-collapse: collapse;
+    width:400px;
+    padding: 5px;
+    margin:0;
+    margin-bottom: 20px;
+}
+
+.table1 th, td {
+    text-align: center;
+    padding: 4px;
+}
+
+.table1 tr:last-child {
+    border-bottom: 1px solid;
+}
+
+.table1 tr:first-child {
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+}
+
+</style>
+
+{% endblock %}

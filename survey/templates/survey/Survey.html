@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Bitte füllen Sie diesen Fragebogen aus
+{% endblock %}
+
+{% block content %}
+
+<p>Für das Ausfüllen des Fragebogens verdienen Sie zusätzlich {{ Constants.survey_payoff }}.</p>
+
+    {% formfields %}
+
+    {% next_button %}
+
+{% endblock %}

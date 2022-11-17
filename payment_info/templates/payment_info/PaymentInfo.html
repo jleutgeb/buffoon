@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Vielen Dank
+{% endblock %}
+
+{% block content %}
+
+    <div class="panel panel-default" style="margin-bottom:10px">
+        <div class="panel-body">
+            <p>Heute haben Sie {{ payoff|c }} verdient. Zusätzlich erhalten Sie eine Teilnahmegebühr von {{ participation_fee|c }}. </p>
+            <p>Bitte schreiben Sie die Gesamtsumme von {{ payoff_total|c }} in den Zahlungsbeleg, den wir verteilen, und füllen Sie den Zahlungsbeleg aus. Danach gehen Sie ins Büro nebenan und lassen Sie sich die Gesamtsumme in bar auszahlen.</p>
+        </div>
+    </div>
+
+{% endblock %}
+
